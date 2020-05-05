@@ -1,4 +1,29 @@
+import 'package:clima/services/location.dart';
+import 'package:clima/utilities/constants.dart';
+
+import 'networking.dart';
+
 class WeatherModel {
+
+
+  Future<dynamic> getLocationWeather() async {
+    Location location = Location();
+    await location.getCurrentLocation();
+    NetworkHelper networkHelper = NetworkHelper(
+        '$kAPIUrl?lat=${location.latitude}&lon=${location
+            .longitude}&appid=$kAPIkey&units=metric');
+    var weatherData = await networkHelper.getData();
+    return weatherData;
+  }
+
+  Future<dynamic> getCityWeather(String cityName) async {
+    NetworkHelper networkHelper = NetworkHelper(
+        '$kAPIUrl?q=$cityName&appid=$kAPIkey&units=metric');
+    var weatherData = await networkHelper.getData();
+    return weatherData;
+  }
+
+
   String getWeatherIcon(int condition) {
     if (condition < 300) {
       return '🌩';
